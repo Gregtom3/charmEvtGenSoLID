@@ -137,7 +137,11 @@ int electro_solid_study_psi2S(double Ebeam = 17.2, bool do_deuterium = false, Lo
   double Eg=0.0;
   double Eg_smear=0.0;
   double Eg_true=0.0;
-  
+
+  double vm_p = 0;
+  double vm_theta = 0;
+  double vm_mass_true = 0;
+  double vm_mass_reco = 0;
   TLorentzVector *eIn = new TLorentzVector();
   TLorentzVector *pIn = new TLorentzVector();
   TLorentzVector *eOut = new TLorentzVector();
@@ -194,7 +198,10 @@ int electro_solid_study_psi2S(double Ebeam = 17.2, bool do_deuterium = false, Lo
   tree->Branch("Nsim",&Nsim,"Sims/I");
   tree->Branch("lumi",&lumi,"Luminosity/D");
   tree->Branch("time",&time,"Time/D");
-
+  tree->Branch("vm_p",&vm_p,"Double/D");
+  tree->Branch("vm_theta",&vm_theta,"Double/D");
+  tree->Branch("vm_mass_true",&vm_mass_true,"Double/D");
+  tree->Branch("vm_mass_reco",&vm_mass_reco,"Double/D");
 
   TLorentzVector target_proton;
   target_proton.SetXYZM(0,0,0,0.9382721);
@@ -263,6 +270,11 @@ int electro_solid_study_psi2S(double Ebeam = 17.2, bool do_deuterium = false, Lo
 
       myEvent.tmin = tmin(myEvent.W_true, myEvent.Q2_true);
       myEvent.tmax = tmax(myEvent.W_true, myEvent.Q2_true);
+
+      vm_p=vm.P();
+      vm_theta=vm.Theta();
+      vm_mass_true=vm.M();
+      vm_mass_reco=(_ePlusOutSmear+_eMinusOutSmear).M();
 
       tree->Fill();
 
